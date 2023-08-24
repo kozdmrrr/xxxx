@@ -1,0 +1,30 @@
+﻿@page "/copy"
+@using System.IO
+@inject IFileCopyService FileCopyService
+
+<h3>Kopyalama Sayfası</h3>
+
+<button @onclick="CopyFile" class="rounded-button">Dosyayı Kopyala</button>
+
+@if (!string.IsNullOrEmpty(CopiedFilePath))
+{
+    <p>Kopyalanan Dosya Yolu: @CopiedFilePath</p>
+}
+
+@code {
+    private string CopiedFilePath;
+
+    private async Task CopyFile()
+    {
+        var sourceFilePath = "path/to/source/file.txt"; 
+        var targetFolderPath = "path/to/target/folder"; 
+        var fileName = Path.GetFileName(sourceFilePath); 
+
+        using (var sourceFileStream = File.OpenRead(sourceFilePath))
+        {
+            var copiedFilePath = await FileCopyService.CopyFileAsync(sourceFileStream, fileName, targetFolderPath);
+            CopiedFilePath = copiedFilePath;
+        }
+    }
+
+}

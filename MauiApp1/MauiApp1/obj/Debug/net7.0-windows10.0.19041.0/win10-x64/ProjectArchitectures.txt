@@ -1,0 +1,1 @@
+D:\siemens blazor 2.deneme\MauiApp1\MauiApp1\MauiApp1.csproj;x64

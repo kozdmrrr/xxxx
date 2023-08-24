@@ -1,0 +1,28 @@
+﻿using System.IO;
+using System.Threading.Tasks;
+using YourNamespace.Services;
+
+namespace YourNamespace
+{
+    public class FileService : IFileService
+    {
+        public async Task CopyFileAsync(string sourcePath, string destinationPath)
+        {
+            await File.CopyAsync(sourcePath, destinationPath, true);
+        }
+    }
+}
+using System.IO;
+using System.Threading.Tasks;
+using YourNamespace.Services;
+
+namespace YourNamespace
+{
+    public class FileService : IFileService
+    {
+        public async Task CopyFileAsync(string sourcePath, string destinationPath)
+        {
+            await File.CopyAsync(sourcePath, destinationPath, true);
+        }
+    }
+}

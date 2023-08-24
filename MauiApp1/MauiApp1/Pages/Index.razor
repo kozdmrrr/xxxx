@@ -1,0 +1,55 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.Components.Forms
+@inject IJSRuntime JSRuntime
+@inject IFileCopyService FileCopyService
+
+<h3>Ana Sayfa</h3>
+
+<InputFile @ref="fileInput" OnChange="HandleFileSelection" />
+<p>@fileSelectionMessage</p>
+
+<label>Hedef Klasör Seçin:</label>
+<input type="text" @bind="targetFolderPath" />
+<p>@targetFolderMessage</p>
+
+<button @onclick="CopyFileToDestination" class="rounded-button">Dosya Seç ve Kopyala</button>
+
+@if (!string.IsNullOrEmpty(copiedFilePath))
+{
+    <p>Kopyalanan Dosya Yolu: @copiedFilePath</p>
+}
+
+@code {
+    private InputFile fileInput;
+    private IBrowserFile selectedFile;
+    private string targetFolderPath = "";
+    private string copiedFilePath = "";
+    private string fileSelectionMessage = "";
+    private string targetFolderMessage = "";
+
+    private async Task HandleFileSelection(InputFileChangeEventArgs e)
+    {
+        selectedFile = e.File;
+        fileSelectionMessage = "Seçilen Dosya: " + selectedFile.Name;
+    }
+
+    private async Task CopyFileToDestination()
+    {
+        if (selectedFile == null)
+        {
+            fileSelectionMessage = "Dosya seçilmedi!";
+            return;
+        }
+
+        if (string.IsNullOrEmpty(targetFolderPath))
+        {
+            targetFolderMessage = "Hedef klasör seçilmedi!";
+            return;
+        }
+
+        using (var fileStream = selectedFile.OpenReadStream())
+        {
+            copiedFilePath = await FileCopyService.CopyFileAsync(fileStream, selectedFile.Name, targetFolderPath);
+        }
+    }
+}
